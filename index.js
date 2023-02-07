@@ -18,7 +18,7 @@ function opw(arg, id) {
   )
     .then((response) => response.json())
     .then((data) => {
-      for (let i = 0; i < id + 1; i++) {
+      for (let i = 0; i < id; i++) {
         getWeather(data.daily[i].weather[0].id, data.daily[i].dt);
       }
     });
