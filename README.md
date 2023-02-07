@@ -137,3 +137,5 @@ function getHour(hours, timezone) {
 ```
 
 # etape 5
+
+rajouter les jours avec un select

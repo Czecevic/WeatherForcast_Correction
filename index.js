@@ -12,31 +12,21 @@ function ocd(arg) {
     .catch((error) => console.log(error));
 }
 
-function opw(arg) {
-  console.log(arg);
+function opw(arg, id) {
   return fetch(
     `https://api.openweathermap.org/data/2.5/onecall?lat=${arg[0].lat}&lon=${arg[0].lng}&cnt=7&exclude=minutely,hourly&units=metric&appid=${API_KEY_OPW}`
   )
     .then((response) => response.json())
     .then((data) => {
-      document.getElementById("locationHour").innerText =
-        getHour(data.current.dt, data.timezone) + " UTC Time";
-      return getWeather(data.current.weather[0].id);
+      for (let i = 0; i < id + 1; i++) {
+        getWeather(data.daily[i].weather[0].id, data.daily[i].dt);
+      }
     });
 }
 
-function getHour(hours, timezone) {
-  // let hour = hours.split(" ")[0];
-  let hour = new Date(hours * 1000);
-  return hour.toLocaleString("en-US", {
-    timeZone: timezone,
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
-function getWeather(id) {
+function getWeather(id, hours) {
   let path;
+  let hour = new Date(hours * 1000);
   if (id === 800) {
     path = "./assets/sun.svg";
   } else if (id >= 600 && 622 >= id) {
@@ -51,8 +41,9 @@ function getWeather(id) {
   } else {
     path = "./assets/rain.svg";
   }
-  document.querySelector("#container").innerHTML = `
+  document.querySelector("#container").innerHTML += `
     <div class="card-day" data-id=${id}>
+    <h1>${hour.toLocaleDateString("fr-FR", { weekday: "long" })}</h1>
         <img id="imageURL" class="card-icon" src="${path}" alt="weather image">
     </div>
     `;
@@ -63,10 +54,14 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
     let meteo = [];
     let inputCityName = document.getElementById("city").value.toLowerCase();
+    let eltSelect = document.querySelector("select");
     ocd(inputCityName).then((data) => {
       for (let i = 0; i < data.results.length; i++) {
         meteo.push(data.results[0].geometry);
-        opw(meteo);
+        opw(meteo, eltSelect.selectedIndex);
+        if (document.querySelectorAll("img").length > 0) {
+          document.querySelector("#container").innerHTML = "";
+        }
       }
     });
   });

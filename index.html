@@ -12,9 +12,19 @@
     <form action="" method="get" class="form-meteo" id="form-meteo">
       <label for="name">Enter your city: </label>
       <input type="text" name="city" id="city" required />
+      <label for="name">Enter the number of days you want: </label>
+      <select name="num_of_days" id="days-select" required>
+        <option value="">--Please choose an option--</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+      </select>
       <input type="submit" value="Go!" />
     </form>
-    <div id="locationHour"></div>
     <div id="container"></div>
   </body>
   <script src="./index.js"></script>
