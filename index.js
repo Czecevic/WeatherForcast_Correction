@@ -50,8 +50,14 @@ function getWeather(id, hours) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  let date = new Date();
   document.getElementById("form-meteo").addEventListener("submit", (event) => {
     event.preventDefault();
+    if (date.getHours() >= 16) {
+      document.querySelector("body").style.backgroundColor = "#1f263b";
+    } else {
+      document.querySelector("body").style.backgroundColor = "#bcd4e6";
+    }
     let meteo = [];
     let inputCityName = document.getElementById("city").value.toLowerCase();
     let eltSelect = document.querySelector("select");
