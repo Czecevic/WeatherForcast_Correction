@@ -3,7 +3,7 @@ const API_KEY_OCD = "3456114c599c400fbcbafa7852f29bc4";
 
 function ocd(arg) {
   return fetch(
-    `https://api.opencagedata.com/geocode/v1/json?q=${arg}&key=${API_KEY_OCD}&pretty=1&no_annotations=1&limit=1`
+    `https://api.opencagedata.com/geocode/v1/json?q=${arg}&key=${API_KEY_OCD}&pretty=1&limit=1`
   )
     .then((response) => response.json())
     .then((data) => {
@@ -18,8 +18,21 @@ function opw(arg, id) {
   )
     .then((response) => response.json())
     .then((data) => {
+      let hour = new Date(data.daily[0].dt * 1000)
+      console.log(hour)
       for (let i = 0; i < id; i++) {
         getWeather(data.daily[i].weather[0].id, data.daily[i].dt);
+      }
+      if (hour.getHours() >= 18 || hour.getHours() <= 8) {
+        document.querySelector("body").style.backgroundColor = "#1f263b";
+        document.querySelectorAll('*').forEach((node) => {
+          node.style.color = "#fff"
+        })
+        document.querySelectorAll('img').forEach(element => {
+          element.style.filter = "invert(1)"
+        });
+      } else {
+        document.querySelector("body").style.backgroundColor = "#bcd4e6";
       }
     });
 }
@@ -53,11 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let date = new Date();
   document.getElementById("form-meteo").addEventListener("submit", (event) => {
     event.preventDefault();
-    if (date.getHours() >= 16) {
-      document.querySelector("body").style.backgroundColor = "#1f263b";
-    } else {
-      document.querySelector("body").style.backgroundColor = "#bcd4e6";
-    }
+    // console.log(date)
     let meteo = [];
     let inputCityName = document.getElementById("city").value.toLowerCase();
     let eltSelect = document.querySelector("select");
